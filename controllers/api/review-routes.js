@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
-const { Movie, User, Reviews } = require('../models/Movie');
+const { Movie, User, Reviews } = require('../../models');
 
 // GET all reviews for a movie
 router.get('/:id', (req, res) => {

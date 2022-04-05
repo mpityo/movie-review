@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
-const { Movie, User, Reviews } = require('../models/Movie');
-const { getTopRatedAPI, getNowShowingAPI, getPopularAPI, getSingleMovieAPI, saveToDB } = require('../../util/api-call');
+const { Movie, User, Reviews } = require('../../models');
+const { getTopRatedAPI, getNowShowingAPI, getPopularAPI, getSingleMovieAPI, saveToDB } = require('../../utils/api-call');
 
 // GET a single movie
 router.get('/:id', (req, res) => {
@@ -74,6 +74,7 @@ router.get('/top-rated', (req, res) => {
     })
     .then((dbMovieData) => {
         if (!dbMovieData) {
+            console.log('no data ', dbMovieData);
             getTopRatedAPI()
             .then(dbMovieData => {
                 res.json(dbMovieData);
@@ -86,7 +87,7 @@ router.get('/top-rated', (req, res) => {
 });
 
 // GET 'now-showing' movie tag in db
-router.get('/top-showing', (req, res) => {
+router.get('/now-showing', (req, res) => {
     Movie.findAll({
         where: {
             tag: 'now-showing'

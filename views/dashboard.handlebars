@@ -1,0 +1,36 @@
+<section class="mt-3 container">
+<div class="page-header">
+    <h1>Dashboard</h1>
+</div>
+<section class="card bg-light mb-4">
+    <h2 class="card-title ms-4 pt-4">Create New Post</h2>
+    <form class="new-post-form card-body">
+        <div class="form-floating">
+            <input type="text" class="form-control" name="post-title" id="post-title" placeholder="title" style="max-width: 600px;"/>
+            <label for="post-title">Title</label>
+        </div>
+        <div>
+            <textarea class="form-control mt-2" name="post-content" id="post-content" placeholder="content"></textarea>
+        </div>
+        <button type="submit" class="btn btn-md btn-success mt-3">Create</button>
+    </form>
+</section>
+
+{{#if posts.length}}
+<section>
+    <h2>Your Posts</h2>
+    <ol>
+        {{#each posts as |post|}}
+        <li>
+            <div class="mb-3">
+            {{> post-info post}}
+            <a href="/dashboard/edit/{{post.id}}" class="btn btn-sm btn-warning">Edit post</a>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+</section>
+{{/if}}
+</section>
+
+<script src="/javascript/add-post.js"></script>
