@@ -20,10 +20,21 @@ router.get('/:id', (req, res) => {
             },
             {
                 model: Movie,
-                attributes: []
+                attributes: ['dbId']
             }
         ]
     })
-})
+    .then(dbReviewData => {
+        if (!dbReviewData) {
+            res.status(404).json({ message: "No reviews found for this movie "});
+            return;
+        }
+        res.json(dbReviewData);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+    });
+});
 
 module.exports = router;
