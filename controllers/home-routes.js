@@ -3,40 +3,58 @@ const sequelize = require('../config/connection');
 const { Reviews, User, Movie } = require('../models');
 
 router.get('/', (req, res) => {
-	// Post.findAll({
-  //   attributes: [
-  //     'id',
-  //     'post_url',
-  //     'title',
-  //     'created_at',
-  //     [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
-  //   ],
-  //   include: [
-  //     {
-  //       model: Comment,
-  //       attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-  //       include: {
-  //         model: User,
-  //         attributes: ['username']
-  //       }
-  //     },
-  //     {
-  //       model: User,
-  //       attributes: ['username']
-  //     }
-  //   ]
-  // })
-  //   .then(dbPostData => {
-  //     // pass a single post object into the homepage template
-	//   const posts = dbPostData.map(post => post.get({ plain: true }));
+	Movie.findAll({
+    attributes: [
+      'id',
+      'db_id',
+      'title',
+      'description',
+      'critic_review',
+      'poster_path',
+      'genre',
+      'tag'
+  ],
+  include: [
+      {
+          model: Reviews,
+          attributes: ['id', 'user_id', 'movie_id', 'post', 'stars'],
+          include: {
+              model: User,
+              attributes: ['id', 'username']
+          }
+      }
+    ]
+  })
+    .then(dbMovieData => {
+      // pass a single movie object into the homepage template
+	  const movies = dbMovieData.map(movie => movie.get({ plain: true }));
+    let popular = [];
+    let nowPlaying = [];
+    let topRated = [];
+    let noTag = [];
+    movies.forEach((element, index) => {
+      if (element.tag === 'popular') {
+        popular.push(element);
+      } else if (element.tag === 'now_playing') {
+        nowPlaying.push(element);
+      } else if (element.tag === 'top_rated') {
+        topRated.push(element);
+      } else {
+        noTag.push(element);
+      }
+    });
       res.render('homepage', { 
+        popular,
+        nowPlaying,
+        topRated,
+        noTag,
         loggedIn: req.session.loggedIn 
       });
-    //})
-    // .catch(err => {
-    //   console.log(err);
-    //   res.status(500).json(err);
-    // });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.get('/login', (req, res) => {

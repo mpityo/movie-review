@@ -7,17 +7,17 @@ const apiKey = process.env.MOVIEDB_API_KEY;
 
 function saveToDB (data, tag = '') {
     let genre = [];
-    if (data.genres) {
+    if (Array.isArray(data.genre_ids)) {
+        genre = data.genre_ids;
+    } else {
         const genres = data.genres;
-        if (data.genres.length > 1) {
+        if (genres.length > 1) {
             for (var i = 0; i < genres.length; i++) {
                 genre.push(genres[i].id);
             }
         } else {
             genre = [genres[0].id];
         }
-    } else {
-        genre = data.genre_ids;
     }
 
     Movie.create({
@@ -47,10 +47,10 @@ async function getFromServer (whatToGet) {
             .then(data => {
                 let returnedData = [];
                 let errors = [];
-                if (!Array.isArray(data)) {
+                if (!Array.isArray(data.results)) {
                     return saveToDB(data);
                 }
-                data.results.forEach((element) => {
+                data.results.forEach((element, index) => {
                     const saveToDbResponse = saveToDB(element, whatToGet);
                     if (Array.isArray(saveToDbResponse)) {
                         errors.push(saveToDbResponse[1]);

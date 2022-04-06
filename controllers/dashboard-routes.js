@@ -6,7 +6,7 @@ const withAuth = require('../util/auth');
 // /dashboard routes
 
 router.get('/', withAuth, (req, res) => {
-    // Post.findAll({
+    // Reviews.findAll({
     //     where: {
     //         user_id: req.session.user_id
     //     },
