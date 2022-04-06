@@ -27,11 +27,12 @@ Reviews.init(
             allowNull: false,
             references: {
                 model: 'movie',
-                key: 'id'
+                key: 'db_id'
             }
         },
         user_id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
                 model: 'user',
                 key: 'id'
