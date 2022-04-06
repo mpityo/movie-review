@@ -1,7 +1,68 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { Movie, User, Reviews } = require('../../models');
-const { getTopRatedAPI, getNowShowingAPI, getPopularAPI, getSingleMovieAPI, saveToDB } = require('../../util/api-call');
+const fetch = require('node-fetch');
+const baseURL = 'https://api.themoviedb.org';
+const apiKey = process.env.MOVIEDB_API_KEY;
+
+function saveToDB (data, tag = '') {
+    let genre = [];
+    if (data.genres) {
+        const genres = data.genres;
+        if (data.genres.length > 1) {
+            for (var i = 0; i < genres.length; i++) {
+                genre.push(genres[i].id);
+            }
+        } else {
+            genre = [genres[0].id];
+        }
+    } else {
+        genre = data.genre_ids;
+    }
+
+    Movie.create({
+        db_id: data.id,
+        title: data.title,
+        description: data.overview,
+        critic_review: data.vote_average,
+        poster_path: data.poster_path,
+        genre,
+        tag,
+        release_date: data.release_date
+    })
+    .then(dbMovieData => {
+        return dbMovieData;
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}
+
+async function getFromServer (whatToGet) {
+    const url = `${baseURL}/3/movie/${whatToGet}?api_key=${apiKey}&language=en-US`;
+    fetch(url)
+    .then(response => {
+        if (response) {
+            response.json()
+            .then(data => {
+                let returnedData = [];
+                let errors = [];
+                if (!Array.isArray(data)) {
+                    return saveToDB(data);
+                }
+                data.results.forEach((element) => {
+                    const saveToDbResponse = saveToDB(element, whatToGet);
+                    if (Array.isArray(saveToDbResponse)) {
+                        errors.push(saveToDbResponse[1]);
+                    } else {
+                        returnedData.push(saveToDbResponse);
+                    }
+                });
+                return returnedData;
+            });
+        }
+    })
+}
 
 // GET a single movie
 router.get('/:id', (req, res) => {
@@ -34,7 +95,7 @@ router.get('/:id', (req, res) => {
         // if movie data doesn't exist in DB (database), find it in server api, add it to DB and send results
         // does not need to include reviews, as there are none if it wasn't in DB
         if (!dbMovieData) {
-            getSingleMovieAPI(req.body.db_id)
+            getFromServer(req.params.id)
             .then(dbMovieData => {
                 res.json(dbMovieData);
                 return;
@@ -45,77 +106,23 @@ router.get('/:id', (req, res) => {
     })
 });
 
-// GET 'popular' movie tag in db
-router.get('/popular', (req, res) => {
-    console.log('in popular');
-    Movie.findAll({
-        where: {
-            tag: 'popular'
-        }
-    })
-    .then((dbMovieData) => {
-        console.log(dbMovieData);
-        if (!dbMovieData) {
-            console.log('no data in set');
-            getPopularAPI()
-            .then(dbMovieData => {
-                res.json(dbMovieData);
-                return;
-            });
-        } else {
-            res.json(dbMovieData);
-        }
-    });
-});
-
-// GET 'top-rated' movie tag in db
-router.get('/top-rated', (req, res) => {
-    Movie.findAll({
-        where: {
-            tag: 'top-rated'
-        }
-    })
-    .then((dbMovieData) => {
-        if (!dbMovieData) {
-            console.log('no data ', dbMovieData);
-            getTopRatedAPI()
-            .then(dbMovieData => {
-                res.json(dbMovieData);
-                return;
-            });
-        } else {
-            res.json(dbMovieData);
-        }
-    })
-});
-
-// GET 'now-showing' movie tag in db
-router.get('/now-showing', (req, res) => {
-    Movie.findAll({
-        where: {
-            tag: 'now-showing'
-        }
-    })
-    .then((dbMovieData) => {
-        if (!dbMovieData) {
-            getNowShowingAPI()
-            .then(dbMovieData => {
-                res.json(dbMovieData);
-                return;
-            });
-        } else {
-            res.json(dbMovieData);
-        }
-    })
-});
-
-// CREATE movie
+// GET popular, top rated, now playing by using '?type='
 router.post('/', (req, res) => {
-    saveToDB(req.body, null)
-    .then(dbMovieData => res.json(dbMovieData))
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+    Movie.findAll({
+        where: {
+            tag: req.query.type
+        }
+    })
+    .then((dbMovieData) => {
+        if (dbMovieData.length === 0) {
+            getFromServer(req.query.type)
+            .then(dbMovieData => {
+                res.json(dbMovieData);
+                return;
+            });
+        } else {
+            res.json(dbMovieData);
+        }
     });
 });
 

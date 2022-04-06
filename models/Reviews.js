@@ -12,7 +12,7 @@ Reviews.init(
             autoIncrement: true
         },
         post: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
                 len: [1]
