@@ -1,3 +1,22 @@
 * {
     font-family: 'Rubik', sans-serif;
 }
+
+.nav-button {
+    padding: 35%;
+    background: transparent;
+    border: 0;
+}
+
+#home-btn:hover {
+    color: white;
+    background: linear-gradient(180deg, rgba(34,37,41,1) 27%, rgba(9,9,121,1) 58%, rgba(0,116,255,1) 100%);
+}
+#catalog-btn:hover {
+    color: white;
+    background: linear-gradient(180deg, rgba(34,37,41,1) 38%, rgba(9,121,28,1) 68%, rgba(0,255,115,1) 100%);
+}
+#search-btn:hover {
+    color: white;
+    background: linear-gradient(180deg, rgba(34,37,41,1) 38%, rgba(121,69,9,1) 68%, rgba(255,145,0,1) 100%);
+}
