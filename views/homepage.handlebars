@@ -4,7 +4,7 @@
 			<h2>Popular</h2>
 		</div>
 		<div class="row media-wrapper overflow-auto">
-			<div class="flex content me-3">
+			<div class="flex content">
 				{{#each popular as |popular|}}
 				{{> movie-info popular}}
 				{{/each}}
@@ -16,7 +16,7 @@
 			<h2>Now playing</h2>
 		</div>
 		<div class="row media-wrapper overflow-auto">
-			<div class="flex content me-3">
+			<div class="flex content">
 				{{#each nowPlaying as |now-playing|}}
 				{{> movie-info now-playing}}
 				{{/each}}
@@ -28,7 +28,7 @@
 			<h2>Top rated</h2>
 		</div>
 		<div class="row media-wrapper overflow-auto">
-			<div class="flex content me-3">
+			<div class="flex content">
 				{{#each topRated as |top-rated|}}
 				{{> movie-info top-rated}}
 				{{/each}}

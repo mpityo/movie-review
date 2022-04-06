@@ -32,10 +32,15 @@ body * {
     padding-bottom: 1rem;
 }
 .poster {
-    height: 250px;
+    height: 225px;
     border-radius: 15px;
 }
 .content {
     display: flex;
     align-items: flex-start;
+}
+.catalog-collection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
