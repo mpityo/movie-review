@@ -18,6 +18,10 @@ Reviews.init(
                 len: [1]
             }
         },
+        stars: {
+            type: DataTypes.DOUBLE,
+            allowNull: false
+        },
         movie_id: {
             type: DataTypes.INTEGER,
             allowNull: false,

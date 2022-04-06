@@ -11,7 +11,7 @@ Movie.init(
             primaryKey: true,
             autoIncrement: true
         },
-        movie_id: {
+        db_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -25,7 +25,7 @@ Movie.init(
         },
         release_date: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         description: {
             type: DataTypes.STRING,

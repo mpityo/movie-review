@@ -1,20 +1,20 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { Movie, User, Reviews } = require('../../models');
-const { getTopRatedAPI, getNowShowingAPI, getPopularAPI, getSingleMovieAPI, saveToDB } = require('../../utils/api-call');
+const { getTopRatedAPI, getNowShowingAPI, getPopularAPI, getSingleMovieAPI, saveToDB } = require('../../util/api-call');
 
 // GET a single movie
 router.get('/:id', (req, res) => {
     Movie.findOne({
         where: {
-            dbId: req.params.id
+            db_id: req.params.id
         },
         attributes: [
             'id',
-            'dbId',
+            'db_id',
             'title',
             'description',
-            'critic_reviews',
+            'critic_review',
             'poster_path',
             'genre',
             'tag'
@@ -22,7 +22,7 @@ router.get('/:id', (req, res) => {
         include: [
             {
                 model: Reviews,
-                attributes: ['id', 'user_id', 'movie_id', 'user_review_content', 'user_review_stars'],
+                attributes: ['id', 'user_id', 'movie_id', 'post', 'stars'],
                 include: {
                     model: User,
                     attributes: ['username']
@@ -34,7 +34,7 @@ router.get('/:id', (req, res) => {
         // if movie data doesn't exist in DB (database), find it in server api, add it to DB and send results
         // does not need to include reviews, as there are none if it wasn't in DB
         if (!dbMovieData) {
-            getSingleMovieAPI(req.body.dbId)
+            getSingleMovieAPI(req.body.db_id)
             .then(dbMovieData => {
                 res.json(dbMovieData);
                 return;
@@ -47,13 +47,16 @@ router.get('/:id', (req, res) => {
 
 // GET 'popular' movie tag in db
 router.get('/popular', (req, res) => {
+    console.log('in popular');
     Movie.findAll({
         where: {
             tag: 'popular'
         }
     })
     .then((dbMovieData) => {
+        console.log(dbMovieData);
         if (!dbMovieData) {
+            console.log('no data in set');
             getPopularAPI()
             .then(dbMovieData => {
                 res.json(dbMovieData);
@@ -62,7 +65,7 @@ router.get('/popular', (req, res) => {
         } else {
             res.json(dbMovieData);
         }
-    })
+    });
 });
 
 // GET 'top-rated' movie tag in db

@@ -10,8 +10,8 @@ router.get('/:id', (req, res) => {
         },
         attributes: [
             'id',
-            'user_review_content',
-            'user_review_stars'
+            'post',
+            'stars'
         ],
         include: [
             {
@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
             },
             {
                 model: Movie,
-                attributes: ['dbId']
+                attributes: ['db_id']
             }
         ]
     })

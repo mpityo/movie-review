@@ -9,13 +9,14 @@ const apiKey = process.env.MOVIEDB_API_KEY;
 // if the movie is already in the database, it is skiped (dbID must be unique)
 // 'tag' is defined by the user - tells us if it's important (now showing, popular, etc)
 function saveToDB (data, tag) {
+    console.log('in saveToDatabase')
     let errors = [];
     data.results.forEach((element) => {
         Movie.create({
-            dbId: element.id,
+            db_id: element.id,
             title: element.title,
             description: element.overview,
-            critic_reviews: element.vote_average,
+            critic_review: element.vote_average,
             poster_path: element.poster_path,
             genre: [element.genre_ids],
             tag
@@ -67,6 +68,7 @@ async function getTopRatedAPI () {
 async function getPopularAPI () {
     const url = `${baseURL}/3/movie/popular?api_key=${apiKey}&language=en-US`;
     const response = await fetch(url);
+    console.log(response);
         if (response.ok) {
             response.json().then(data => {
                 saveToDB(data, 'popular');
