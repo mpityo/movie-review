@@ -12,22 +12,27 @@ Reviews.init(
             autoIncrement: true
         },
         post: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
                 len: [1]
             }
+        },
+        stars: {
+            type: DataTypes.DOUBLE,
+            allowNull: false
         },
         movie_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
                 model: 'movie',
-                key: 'id'
+                key: 'movie_id'
             }
         },
         user_id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
                 model: 'user',
                 key: 'id'

@@ -6,14 +6,14 @@ User.hasMany(Reviews, {
     foreignKey: 'user_id'
 });
 Movie.hasMany(Reviews, {
-    foreignKey: 'user_id'
+    foreignKey: 'movie_id'
 });
 
 Reviews.belongsTo(User, {
     foreignKey: 'user_id'
 });
 Reviews.belongsTo(Movie, {
-    foreignKey: 'user_id'
+    foreignKey: 'movie_id'
 });
 
 

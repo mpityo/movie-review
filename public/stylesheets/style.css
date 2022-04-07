@@ -1,0 +1,67 @@
+* {
+    font-family: 'Rubik', sans-serif;
+}
+body * {
+    box-sizing: border-box;
+}
+/* SCROLLBARS */
+::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+    background: rgb(207, 207, 207);
+    border-radius: 20px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(158, 158, 158);
+}
+
+/* NAV */
+.nav-button {
+    padding: 35%;
+    background: transparent;
+    border: 0;
+}
+
+/* DASHBOARD MOVIES */
+.column {
+    margin-left: 15px;
+}
+.media-wrapper {
+    padding-bottom: 1rem;
+}
+.post-sm {
+    height: 225px;
+}
+.poster {
+    border-radius: 15px;
+}
+
+/* CATALOG */
+.content {
+    display: flex;
+    align-items: flex-start;
+}
+.catalog-collection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+/* SINGLE MOVIE VIEW */
+.single-movie-wrapper {
+    color: white;
+    width: 100%;
+    background: rgb(3, 37, 65);
+}
+.movie-information {
+    margin: auto;
+}
+.critic-review {
+    margin-top: 20px;
+    margin-bottom: 0;
+}

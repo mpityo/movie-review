@@ -1,0 +1,13 @@
+<section class="container mt-4">
+    <div>
+        <h3>Don't see a movie? Search for it to add it to the database!</h3>
+    </div>
+    <div>
+        <div><h2>A-Z</h2></div>
+        <div class="catalog-collection">
+            {{#each movies as |movie|}}
+            {{> movie-info movie}}
+            {{/each}}
+        </div>
+    </div>
+</section>

@@ -14,6 +14,7 @@ Movie.init(
         movie_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            unique: true
         },
         title: {
             type: DataTypes.STRING,
@@ -21,22 +22,28 @@ Movie.init(
         },
         genre: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            get() {
+                return this.getDataValue('genre').split(';')
+            },
+            set(val) {
+               this.setDataValue('genre',val.join(';'));
+            },
         },
         release_date: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
+            type: DataTypes.STRING,
+            allowNull: true,
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         critic_review: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DOUBLE(2,1),
             allowNull: true
         },
         user_review: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DOUBLE,
             allowNull: true,
         },
         poster_path: {

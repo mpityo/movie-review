@@ -18,14 +18,6 @@ User.init(
             primaryKey: true,
             autoIncrement: true
         },
-        first_name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        last_name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         username: {
             type: DataTypes.STRING,
             allowNull: false
@@ -55,7 +47,7 @@ User.init(
                 newUserData.password = await bcrypt.hash(newUserData.password, 10);
                 return newUserData;
             },
-            // set up for before the password get posted after an updated
+            // before the password gets posted after an it was updated
             async beforeUpdate(updatedUserData) {
                 updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
                 return updatedUserData;

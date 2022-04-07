@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 		 req.session.username = dbUserData.username;
 		 req.session.loggedIn = true;
 		 
-		 req.json(dbUserData);
+		 res.json(dbUserData);
 	 });
 	});
 });
@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
         include: [
             {
               model: Reviews,
-              attributes: ['id', 'movie_id', 'user_review_content', 'user_review_stars']
+              attributes: ['id', 'movie_id', 'post', 'stars']
             }
           ]
     })
