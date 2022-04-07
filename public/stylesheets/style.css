@@ -46,7 +46,7 @@ body * {
     display: flex;
     align-items: flex-start;
 }
-.catalog-collection {
+.catalog {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -64,4 +64,27 @@ body * {
 .critic-review {
     margin-top: 20px;
     margin-bottom: 0;
+}
+
+/* SEARCH */
+.hero {
+    height: 200px;
+    width: 100%;
+    background: rgb(3, 37, 65);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.search-container {
+    justify-content: center;
+    padding-top: 30px;
+}
+.search-container input[type=text] {
+    max-width: 300px;
+}
+.search-container button {
+    background: transparent;
+    border: 0;
 }

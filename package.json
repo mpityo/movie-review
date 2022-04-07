@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/mpityo/movie-review#readme",
   "dependencies": {
+    "@bluecarmon/colorthief": "^2.3.3",
     "bcrypt": "^5.0.1",
     "color.js": "^1.2.0",
     "connect-session-sequelize": "^7.1.2",

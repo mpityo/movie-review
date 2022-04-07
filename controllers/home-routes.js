@@ -3,7 +3,8 @@ const sequelize = require('../config/connection');
 const fetch = require('node-fetch');
 const { Reviews, User, Movie } = require('../models');
 const getFromServer = require('./api/movie-routes');
-const { average } = require('color.js');
+const baseURL = 'https://api.themoviedb.org';
+const apiKey = process.env.MOVIEDB_API_KEY;
 
 router.get('/', (req, res) => {
 	Movie.findAll({})
@@ -13,6 +14,7 @@ router.get('/', (req, res) => {
     let popular = [];
     let nowPlaying = [];
     let topRated = [];
+    let lastestAdded = [];
     let noTag = [];
     movies.forEach((element, index) => {
       if (element.tag === 'popular') {
@@ -21,6 +23,8 @@ router.get('/', (req, res) => {
         nowPlaying.push(element);
       } else if (element.tag === 'top_rated') {
         topRated.push(element);
+      } else if (element.tag === 'latest') {
+        lastestAdded.push(element);
       } else {
         noTag.push(element);
       }
@@ -56,6 +60,31 @@ router.get("/sign-up", (req, res) => {
 
   res.render("sign-up");
 });
+
+router.get("/search", (req, res) => {
+  res.render("search");
+  return;
+});
+
+router.post("/search", (req, res) => {
+  fetch(`${baseURL}/3/search/movie?api_key=${apiKey}&language=en-US&query=${req.body.search}&page=1&include_adult=false`)
+    .then(response => {
+        if (response) {
+            return response.json()
+        } else {
+            console.log(response);
+            return;
+        }
+    })
+    .then(data => {
+        const results = data.results;
+        console.log(results);
+        res.render("result", {
+            results
+        });
+        return;
+    });
+})
 
 // DISPLAY single movie information
 router.get("/movie/:id", (req, res) => {

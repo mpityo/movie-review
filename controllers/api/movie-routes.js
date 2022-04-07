@@ -16,7 +16,7 @@ function saveToDB (data, tag = '') {
                 genre.push(genres[i].id);
             }
         } else {
-            genre = [genres[0].id];
+            genre = genres[0].id;
         }
     }
 
@@ -34,12 +34,22 @@ function saveToDB (data, tag = '') {
         return dbMovieData;
     })
     .catch(err => {
+        // if (err.code == 'ER_DUP_ENTRY') {
+
+        //     Movie.update({
+        //         tag: 
+        //         where: {
+        //             movie_id: data.id
+        //         }
+        //     });
+        //     return;
+        // }
         console.log(err);
     });
 }
 
-async function getFromServer (whatToGet) {
-    const url = `${baseURL}/3/movie/${whatToGet}?api_key=${apiKey}&language=en-US`;
+async function getFromServer (whatToGet, pageNum = '1') {
+    const url = `${baseURL}/3/movie/${whatToGet}?api_key=${apiKey}&language=en-US&page=${pageNum}`;
     fetch(url)
     .then(response => {
         if (response) {
@@ -105,7 +115,7 @@ router.post('/', (req, res) => {
     })
     .then((dbMovieData) => {
         if (dbMovieData.length === 0) {
-            getFromServer(req.query.type)
+            getFromServer(req.query.type, req.query.page)
             .then(dbMovieData => {
                 res.json(dbMovieData);
                 return;

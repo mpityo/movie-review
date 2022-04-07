@@ -1,0 +1,22 @@
+<section class="container">
+    {{!-- Search bar at top --}}
+    <div class="hero d-flex">
+        <div>
+            <h2 class="text-white">Search for a movie, genre, or category</h2>
+        </div>
+        <div class="search-container d-flex">
+            <input type="text" class="form-control" placeholder="search.." aria-label="search bar">
+            <button class="btn-secondary btn" type="submit">submit</button>
+        </div>
+    </div>
+
+    {{!-- Results section --}}
+    <div class="catalog">
+        {{#each results as |result|}}
+        <h2>ANY INFO???????</h2>
+        {{> movie-info result}}
+        {{/each}}
+    </div>
+</section>
+
+<script src="/javascript/search.js"></script>

@@ -47,8 +47,7 @@ Movie.init(
             allowNull: true,
         },
         poster_path: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING
         },
         tag: {
             type: DataTypes.STRING,
