@@ -7,24 +7,14 @@ router.get('/', (req, res) => {
     order: [['title', 'ASC']],
     attributes: [
       'id',
-      'db_id',
+      'movie_id',
       'title',
       'description',
       'critic_review',
       'poster_path',
       'genre',
       'tag'
-  ],
-  include: [
-      {
-          model: Reviews,
-          attributes: ['id', 'user_id', 'movie_id', 'post', 'stars'],
-          include: {
-              model: User,
-              attributes: ['id', 'username']
-          }
-      }
-    ]
+  ]
   })
     .then(dbMovieData => {
       // pass a single movie object into the homepage template

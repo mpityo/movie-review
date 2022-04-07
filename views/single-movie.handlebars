@@ -1,0 +1,78 @@
+<section class="container">
+<div class="mt-3 single-movie-wrapper">
+  <div class="d-flex flex-row">
+    <div class="img pe-5">
+      <img class="poster" src="https://image.tmdb.org/t/p/w300/{{movie.poster_path}}" alt="">
+    </div>
+
+    <div class="movie-information d-flex flex-column">
+      {{!-- Header - title and release date --}}
+      <div>
+        <h2 class="fw-bold">{{movie.title}}</h2>
+      </div>
+      <div>
+        <h4 class="fs-6">
+          {{format_date movie.release_date}}
+          &bull;
+          {{movie.genre}}
+        </h4>
+      </div>
+
+      {{!-- Reviews --}}
+      <div class="">
+        <div>
+          <h4 class="d-flex flex-row critic-review">Critic reviews:
+            <div class="d-flex flex-row ps-2">
+              <p class="fw-bold">{{movie.critic_review}}</p>
+            </div>
+          </h4>
+        </div>
+        <div>
+          <h4 class="d-flex flex-row">User reviews:
+            <div class="d-flex flex-row ps-2">
+              <p class="fw-bold">{{format_score movie.user_review}}</p>
+            </div>
+          </h4>
+        </div>
+      </div>
+
+      {{!-- Description --}}
+      <div class="pe-5">
+        <p>{{movie.description}}</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<section class="mt-3">
+  <h2>Reviews</h2>
+  {{#if reviews}}
+    {{> reviews reviews}}
+  {{else}}
+  <h4>Nobody has left a review, perhaps you should...</h4>
+  {{/if}}
+
+{{#if loggedIn}}
+  <h3 class="mt-4">Leave your review below:</h3>
+<form class="review-form">
+  <div>
+    <textarea name="review-body" class="form-control" name="review-body" placeholder="review text" style="height: 200px;"></textarea>
+  </div>
+  <div>
+    <label for="review-range" class="form-label">Your score (1-10)</label>
+    <input type="range" class="form-range" min="0" max="10" step="0.5" id="review-range">
+  </div>
+  <div>
+    <button type="submit" class="btn btn-md btn-primary mt-3">add review</button>
+  </div>
+</form>
+</section>
+{{else}}
+<h4 class="mx-auto">Login to leave a review of your own!</h4>
+{{/if}}
+</section>
+
+{{#if loggedIn}}
+<script src="/javascript/review-movie.js"></script>
+{{/if}}

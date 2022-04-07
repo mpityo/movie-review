@@ -11,7 +11,7 @@ Movie.init(
             primaryKey: true,
             autoIncrement: true
         },
-        db_id: {
+        movie_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             unique: true

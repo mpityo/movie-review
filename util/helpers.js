@@ -10,5 +10,12 @@ module.exports = {
         return `${word}s`;
       }
       return word;
+    },
+
+    format_score: (score) => {
+      if(score === null) {
+        return `no score yet`
+      }
+      return score;
     }
   };

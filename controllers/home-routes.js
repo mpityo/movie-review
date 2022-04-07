@@ -1,32 +1,14 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
+const fetch = require('node-fetch');
 const { Reviews, User, Movie } = require('../models');
+const getFromServer = require('./api/movie-routes');
+const { average } = require('color.js');
 
 router.get('/', (req, res) => {
-	Movie.findAll({
-    attributes: [
-      'id',
-      'db_id',
-      'title',
-      'description',
-      'critic_review',
-      'poster_path',
-      'genre',
-      'tag'
-  ],
-  include: [
-      {
-          model: Reviews,
-          attributes: ['id', 'user_id', 'movie_id', 'post', 'stars'],
-          include: {
-              model: User,
-              attributes: ['id', 'username']
-          }
-      }
-    ]
-  })
+	Movie.findAll({})
     .then(dbMovieData => {
-      // pass a single movie object into the homepage template
+    // pass a single movie object into the homepage template
 	  const movies = dbMovieData.map(movie => movie.get({ plain: true }));
     let popular = [];
     let nowPlaying = [];
@@ -73,6 +55,81 @@ router.get("/sign-up", (req, res) => {
   }
 
   res.render("sign-up");
+});
+
+// DISPLAY single movie information
+router.get("/movie/:id", (req, res) => {
+  let movie;
+  Movie.findOne({
+    where: {
+      movie_id: req.params.id,
+    },
+  include: [
+      {
+          model: Reviews,
+          attributes: ['id', 'post', 'user_id', 'movie_id', 'stars'],
+          include: {
+              model: User,
+              attributes: ['id', 'username']
+          }
+      }
+    ]
+  })
+    .then((dbMovieData) => {
+      if (!dbMovieData) {
+        getFromServer(req.params.id)
+            .then(dbMovieData => {
+              movie = dbMovieData.get({ plain: true });
+            });
+      }
+      movie = dbMovieData.get({ plain: true });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+
+  Reviews.findAll({
+      where: {
+        movie_id: req.params.id
+      },
+      attributes: [
+        'id',
+        'movie_id',
+        'post',
+        'stars',
+        'user_id',
+        'created_at',
+      //   [
+      //     sequelize.fn('sum', sequelize.col('stars')),
+      //     'user_scores'
+      // ]
+      ],
+      include: {
+        model: User,
+        attributes: ['id', 'username']
+      }
+    })
+    .then((dbReviewData) => {
+      if (!dbReviewData) {
+              res.render("single-movie", {
+                movie,
+                loggedIn: req.session.loggedIn,
+              });
+                return;
+      }
+      const reviews = dbReviewData.map(review => review.get({ plain: true }));
+      res.render("single-movie", {
+        movie,
+        reviews,
+        loggedIn: req.session.loggedIn,
+      });
+        return;
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;

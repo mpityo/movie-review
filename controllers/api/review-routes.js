@@ -36,13 +36,46 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// GET all reviews for a user
+router.get('/user/:id', (req, res) => {
+    Reviews.findAll({
+        where: {
+            user_id: req.params.id
+        },
+        attributes: [
+            'id',
+            'post',
+            'stars',
+            'user_id',
+            'movie_id'
+        ],
+        include: [
+            {
+                model: User,
+                attributes: ['username']
+            }
+        ]
+    })
+    .then(dbReviewData => {
+        if (!dbReviewData) {
+            res.status(404).json({ message: "No reviews found for this movie "});
+            return;
+        }
+        res.json(dbReviewData);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+    });
+});
+
 // CREATE review
 router.post('/', withAuth, (req, res) => {
     Reviews.create({
         post: req.body.post,
         stars: req.body.stars,
         movie_id: req.body.movie_id,
-        user_id: req.body.user_id
+        user_id: req.session.user_id
     })
     .then(dbReviewData => res.json(dbReviewData))
     .catch(err => {

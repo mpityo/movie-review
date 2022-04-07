@@ -21,7 +21,7 @@ function saveToDB (data, tag = '') {
     }
 
     Movie.create({
-        db_id: data.id,
+        movie_id: data.id,
         title: data.title,
         description: data.overview,
         critic_review: data.vote_average,
@@ -68,18 +68,8 @@ async function getFromServer (whatToGet) {
 router.get('/:id', (req, res) => {
     Movie.findOne({
         where: {
-            db_id: req.params.id
+            movie_id: req.params.id
         },
-        attributes: [
-            'id',
-            'db_id',
-            'title',
-            'description',
-            'critic_review',
-            'poster_path',
-            'genre',
-            'tag'
-        ],
         include: [
             {
                 model: Reviews,
@@ -126,4 +116,4 @@ router.post('/', (req, res) => {
     });
 });
 
-module.exports = router;
+module.exports = router, getFromServer;

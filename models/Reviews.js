@@ -27,7 +27,7 @@ Reviews.init(
             allowNull: false,
             references: {
                 model: 'movie',
-                key: 'db_id'
+                key: 'movie_id'
             }
         },
         user_id: {
