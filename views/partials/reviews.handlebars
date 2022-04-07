@@ -1,0 +1,17 @@
+<div class="reviews">
+  {{#each this}}
+    <section class="card mb-3">
+      <div class="card-header meta">
+        {{user.username}}
+        on
+        {{format_date created_at}}
+      </div>
+      <div class="card-body">
+        {{post}}
+      <div class="pt-3">
+        {{stars}}/10
+      </div>
+      </div>
+    </section>
+  {{/each}}
+</div>
