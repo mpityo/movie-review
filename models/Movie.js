@@ -22,7 +22,6 @@ Movie.init(
         },
         genre: {
             type: DataTypes.STRING,
-            allowNull: false,
             get() {
                 return this.getDataValue('genre').split(';')
             },

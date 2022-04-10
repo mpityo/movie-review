@@ -1,7 +1,14 @@
 <section class="mt-3 container">
 <div class="page-header">
-    <h1>Dashboard</h1>
+    <h1>Dashboard - Hi, {{user.username}}!</h1>
 </div>
+{{#if user.isAdmin}}
+<section class="admin-button-form">
+    <button class="btn btn-primary btn-popular" id="popular">Load popular</button>
+    <button class="btn btn-primary btn-nowplaying" id="now_playing">Load now playing</button>
+    <button class="btn btn-primary btn-toprated" id="top_rated">Load top rated</button>
+</section>
+{{/if}}
 <section class="card bg-light mb-4">
     <h2 class="card-title ms-4 pt-4">Create New Post</h2>
     <form class="new-post-form card-body">
@@ -16,15 +23,15 @@
     </form>
 </section>
 
-{{#if posts.length}}
+{{#if reviews.length}}
 <section>
     <h2>Your Posts</h2>
     <ol>
-        {{#each posts as |post|}}
+        {{#each reviews as |review|}}
         <li>
             <div class="mb-3">
-            {{> post-info post}}
-            <a href="/dashboard/edit/{{post.id}}" class="btn btn-sm btn-warning">Edit post</a>
+            {{> reviews review}}
+            <a href="/dashboard/edit/{{review.id}}" class="btn btn-sm btn-warning">Edit post</a>
             </div>
         </li>
         {{/each}}
@@ -34,3 +41,6 @@
 </section>
 
 <script src="/javascript/add-post.js"></script>
+{{#if user.isAdmin}}
+<script src="/javascript/admin-buttons.js"></script>
+{{/if}}

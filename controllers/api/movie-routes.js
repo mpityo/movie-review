@@ -7,7 +7,7 @@ const apiKey = process.env.MOVIEDB_API_KEY;
 
 function saveToDB (data, tag = '') {
     let genre = [];
-    if (Array.isArray(data.genre_ids)) {
+    if (data.genre_ids.includes('')) {
         genre = data.genre_ids;
     } else {
         const genres = data.genres;
@@ -52,9 +52,11 @@ async function getFromServer (whatToGet, pageNum = '1') {
     const url = `${baseURL}/3/movie/${whatToGet}?api_key=${apiKey}&language=en-US&page=${pageNum}`;
     fetch(url)
     .then(response => {
+        console.log('got the response in fetch of ' + response);
         if (response) {
             response.json()
             .then(data => {
+                console.log('response was good and heres the data: ' + data);
                 let returnedData = [];
                 let errors = [];
                 if (!Array.isArray(data.results)) {
@@ -68,7 +70,7 @@ async function getFromServer (whatToGet, pageNum = '1') {
                         returnedData.push(saveToDbResponse);
                     }
                 });
-                return returnedData;
+                return data;
             });
         }
     })
@@ -106,24 +108,68 @@ router.get('/:id', (req, res) => {
     })
 });
 
-// GET popular, top rated, now playing by using '?type='
+// // GET popular, top rated, now playing by using '?type='
+// router.post('/single', (req, res) => {
+//     console.log('in single post route');
+//     Movie.findAll({
+//         where: {
+//             tag: req.query.type
+//         }
+//     })
+//     .then((dbMovieData) => {
+//         if (dbMovieData.length === 0) {
+//             getFromServer(req.query.type, req.query.page)
+//             .then(dbMovieData => {
+//                 res.json(dbMovieData);
+//                 return;
+//             });
+//         } else {
+//             res.json(dbMovieData);
+//         }
+//     });
+// });
+
 router.post('/', (req, res) => {
-    Movie.findAll({
-        where: {
-            tag: req.query.type
-        }
-    })
-    .then((dbMovieData) => {
-        if (dbMovieData.length === 0) {
-            getFromServer(req.query.type, req.query.page)
-            .then(dbMovieData => {
-                res.json(dbMovieData);
-                return;
-            });
+    let genre = [];
+    if (req.body.element.genre_ids) {
+        genre = req.body.element.genre_ids;
+    } else {
+        const genres = req.body.element.genres;
+        if (genres.length > 1) {
+            for (var i = 0; i < genres.length; i++) {
+                genre.push(genres[i].id);
+            }
         } else {
-            res.json(dbMovieData);
+            genre = genres[0].id;
         }
+    }
+
+    Movie.create({
+        movie_id: req.body.element.id,
+        title: req.body.element.title,
+        description: req.body.element.overview,
+        critic_review: req.body.element.vote_average,
+        poster_path: req.body.element.poster_path,
+        genre,
+        tag: req.body.tag,
+        release_date: req.body.element.release_date
+    })
+    .then(dbMovieData => {
+        res.json(dbMovieData);
+    })
+    .catch(err => {
+        // if (err.code == 'ER_DUP_ENTRY') {
+
+        //     Movie.update({
+        //         tag: 
+        //         where: {
+        //             movie_id: data.id
+        //         }
+        //     });
+        //     return;
+        // }
+        console.log(err);
     });
-});
+})
 
 module.exports = router, getFromServer;

@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes, BOOLEAN } = require('sequelize');
 const sequelize = require('../config/connection');
 const bcrypt = require('bcrypt');
 
@@ -38,6 +38,7 @@ User.init(
                 len: [4]
             }
         }
+
     },
     {
         hooks: {
