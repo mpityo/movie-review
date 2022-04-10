@@ -88,3 +88,30 @@ body * {
     background: transparent;
     border: 0;
 }
+
+@media (min-width: 769px) {
+    .movie-description {
+        padding-right: 3rem;
+    }
+}
+@media (max-width: 768px) {
+    .movie-wrapper {
+        display: flex;
+        flex-direction: column!important;
+        align-items: center!important;
+        justify-content: center!important;
+    }
+    .movie-information {
+        align-items: center;
+    }
+    .movie-description {
+        padding: 1rem auto;
+    }
+}
+
+@media (max-width: 500px) {
+    .flex-sm {
+        display: flex;
+        flex-direction: column;
+    }
+}

@@ -67,27 +67,27 @@ router.get("/search", (req, res) => {
   return;
 });
 
-router.post("/search", (req, res) => {
-  fetch(
-    `${baseURL}/3/search/movie?api_key=${apiKey}&language=en-US&query=${req.body.search}&page=1&include_adult=false`
-  )
-    .then((response) => {
-      if (response) {
-        return response.json();
-      } else {
-        console.log(response);
-        return;
-      }
-    })
-    .then((data) => {
-      const results = data.results;
-      console.log(results);
-      res.render("result", {
-        results,
-      });
-      return;
-    });
-});
+// router.post("/search", (req, res) => {
+//   fetch(
+//     `${baseURL}/3/search/movie?api_key=${apiKey}&language=en-US&query=${req.body.search}&page=1&include_adult=false`
+//   )
+//     .then((response) => {
+//       if (response) {
+//         return response.json();
+//       } else {
+//         console.log(response);
+//         return;
+//       }
+//     })
+//     .then((data) => {
+//       const results = data.results;
+//       console.log(results);
+//       res.render("result", {
+//         results,
+//       });
+//       return;
+//     });
+// });
 
 // DISPLAY single movie information
 router.get("/movie/:id", (req, res) => {

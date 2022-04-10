@@ -6,14 +6,15 @@
         </div>
         <div class="search-container d-flex">
             <input type="text" class="form-control" placeholder="search.." aria-label="search bar">
-            <button class="btn-secondary btn" type="submit">submit</button>
+            <button class="btn-secondary btn" onclick="searchFormHandler(event)">submit</button>
         </div>
     </div>
-
+</section>
+<section>
     {{!-- Results section --}}
     <div class="catalog">
         {{#each results as |result|}}
-        <h2>ANY INFO???????</h2>
+        <h2>Results</h2>
         {{> movie-info result}}
         {{/each}}
     </div>

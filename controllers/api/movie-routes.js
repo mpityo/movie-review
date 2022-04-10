@@ -52,11 +52,9 @@ async function getFromServer (whatToGet, pageNum = '1') {
     const url = `${baseURL}/3/movie/${whatToGet}?api_key=${apiKey}&language=en-US&page=${pageNum}`;
     fetch(url)
     .then(response => {
-        console.log('got the response in fetch of ' + response);
         if (response) {
             response.json()
             .then(data => {
-                console.log('response was good and heres the data: ' + data);
                 let returnedData = [];
                 let errors = [];
                 if (!Array.isArray(data.results)) {
@@ -108,27 +106,6 @@ router.get('/:id', (req, res) => {
     })
 });
 
-// // GET popular, top rated, now playing by using '?type='
-// router.post('/single', (req, res) => {
-//     console.log('in single post route');
-//     Movie.findAll({
-//         where: {
-//             tag: req.query.type
-//         }
-//     })
-//     .then((dbMovieData) => {
-//         if (dbMovieData.length === 0) {
-//             getFromServer(req.query.type, req.query.page)
-//             .then(dbMovieData => {
-//                 res.json(dbMovieData);
-//                 return;
-//             });
-//         } else {
-//             res.json(dbMovieData);
-//         }
-//     });
-// });
-
 router.post('/', (req, res) => {
     let genre = [];
     if (req.body.element.genre_ids) {
@@ -158,16 +135,6 @@ router.post('/', (req, res) => {
         res.json(dbMovieData);
     })
     .catch(err => {
-        // if (err.code == 'ER_DUP_ENTRY') {
-
-        //     Movie.update({
-        //         tag: 
-        //         where: {
-        //             movie_id: data.id
-        //         }
-        //     });
-        //     return;
-        // }
         console.log(err);
     });
 })

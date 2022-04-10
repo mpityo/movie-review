@@ -1,20 +1,22 @@
-
-async function searchFormHandler () {
+async function searchFormHandler (event) {
     event.preventDefault();
 
-    const searchText = document.querySelector('input[type="text"]').value.trim();
+    const searchText = document.querySelector('input[type="search"]').value.trim();
 
     if (searchText) {
-        const response = await fetch(`/search`, {
-            method: 'post',
-            body: JSON.stringify({
-                search: searchText
-            }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        const response = await fetch(`/api/search`, {
+            method: 'GET',
+        //     body: JSON.stringify({
+        //         search: searchText
+        //     }),
+        // headers: {
+        //     'Content-Type': 'application/json'
+        // }
     });
+        if(response) {
+            console.log(response);
+        }
     }
 }
 
-document.querySelector('.search-container').addEventListener('click', searchFormHandler)
+document.querySelector('.search-btn').addEventListener('submit', searchFormHandler)
